@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+venv/
+.venv/
+
+# Data & Models (too large for git)
+data/
+*.pth
+*.onnx
+*.bin
+checkpoints/
+*.csv
+*.json.bak
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.next/
+*.tsbuildinfo
+
+# Build artifacts
+*.csv.bak
+build_output.txt
+preprocess_log.txt
+*_preview.json
+kfood_*.json
+check_csv.py
+csv_output.txt
+verify_output.txt
+
+# Claude internal
+.claude/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+*.key
