@@ -321,3 +321,4 @@ MIT License — see [LICENSE](LICENSE) for details.
   <em>Started as a Seoul data competition entry. Growing into a global food safety platform.</em><br/>
   <strong>Every country that contributes makes the world safer for everyone with food allergies.</strong>
 </p>
+# noallergy
