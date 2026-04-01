@@ -322,3 +322,4 @@ MIT License — see [LICENSE](LICENSE) for details.
   <strong>Every country that contributes makes the world safer for everyone with food allergies.</strong>
 </p>
 # noallergy
+# noallergy
