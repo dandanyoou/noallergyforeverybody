@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
+import RotatingHeroEmoji from '@/components/RotatingHeroEmoji'
 
 interface Props {
   children: ReactNode
@@ -17,7 +18,7 @@ interface FloatingEmoji {
 }
 
 const FOOD_EMOJIS = [
-  '🍕', '🍔', '🌮', '🍜', '🍣', '🥗', '🍱', '🥘', '🍛', '🍤',
+  '🍕', '🍔', '🌮', '🍜', '🍣', '🍱', '🥘', '🍛', '🍤',
   '🍙', '🥞', '🍩', '🧁', '🍦', '🍎', '🥑', '🫐', '🧆', '🥟',
 ]
 
@@ -90,22 +91,7 @@ export default function SplashStylePage({ children, contentClassName = '' }: Pro
         }}
       />
 
-      <motion.div
-        className="absolute"
-        style={{ top: 14, right: 20, fontSize: 28, zIndex: 1 }}
-        animate={{ y: [0, -8, 0], rotate: [0, 5, 0] }}
-        transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        🍔
-      </motion.div>
-      <motion.div
-        className="absolute"
-        style={{ top: 50, left: 16, fontSize: 22, zIndex: 1 }}
-        animate={{ y: [0, -6, 0], rotate: [0, -6, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-      >
-        🥗
-      </motion.div>
+      <RotatingHeroEmoji top={14} right={20} fontSize={28} />
 
       <div className={`relative z-10 ${contentClassName}`}>
         {children}

@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import { LangProvider, hasSelectedLang } from './lib/LangContext'
 import SplashPage from './pages/SplashPage'
 import Layout from './components/Layout'
+import ClickBurstLayer from './components/ClickBurstLayer'
 import HomePage from './pages/HomePage'
 import ResultPage from './pages/ResultPage'
 import BarcodePage from './pages/BarcodePage'
@@ -15,6 +16,7 @@ export default function App() {
 
   return (
     <LangProvider>
+      <ClickBurstLayer />
       {showSplash ? (
         <SplashPage onDone={() => setShowSplash(false)} />
       ) : (

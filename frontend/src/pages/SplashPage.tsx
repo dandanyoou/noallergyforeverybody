@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { LANGUAGES } from '@/lib/i18n'
 import { useLang } from '@/lib/LangContext'
 import type { LangCode } from '@/lib/i18n'
+import RotatingHeroEmoji from '@/components/RotatingHeroEmoji'
 
 interface Props {
   onDone: () => void
@@ -36,8 +37,10 @@ interface FlyingEmoji {
 
 let emojiId = 0
 
+const FOOD_POOL = FOOD_EMOJIS.filter((e) => e !== '🥗')
+
 export default function SplashPage({ onDone }: Props) {
-  const { setLang } = useLang()
+  const { setLang, t, setPreviewLang } = useLang()
   const [selected, setSelected] = useState<LangCode | null>(null)
   const [leaving, setLeaving] = useState(false)
   const [emojis, setEmojis] = useState<FlyingEmoji[]>([])
@@ -46,7 +49,7 @@ export default function SplashPage({ onDone }: Props) {
   function spawnEmoji() {
     const newEmoji: FlyingEmoji = {
       id: emojiId++,
-      emoji: FOOD_EMOJIS[Math.floor(Math.random() * FOOD_EMOJIS.length)],
+      emoji: FOOD_POOL[Math.floor(Math.random() * FOOD_POOL.length)],
       x: Math.random() * 85,
       dx: (Math.random() - 0.5) * 120,
       duration: 2.2 + Math.random() * 2,
@@ -138,23 +141,7 @@ export default function SplashPage({ onDone }: Props) {
             }}
           />
 
-          {/* 떠다니는 배경 이모티콘 */}
-          <motion.div
-            className="absolute"
-            style={{ top: 14, right: 20, fontSize: 32, zIndex: 1 }}
-            animate={{ y: [0, -8, 0], rotate: [0, 5, 0] }}
-            transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            🍔
-          </motion.div>
-          <motion.div
-            className="absolute"
-            style={{ top: 58, left: 16, fontSize: 24, zIndex: 1 }}
-            animate={{ y: [0, -6, 0], rotate: [0, -6, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-          >
-            🥗
-          </motion.div>
+          <RotatingHeroEmoji top={14} right={20} fontSize={32} />
           <motion.div
             className="absolute"
             style={{ top: 10, left: '47%', marginLeft: -16, fontSize: 40, zIndex: 1 }}
@@ -235,9 +222,9 @@ export default function SplashPage({ onDone }: Props) {
                     lineHeight: 1.2,
                   }}
                 >
-                  알레르기 걱정 NO! 🙅
+                  {t('splash.headline')}
                   <br />
-                  <span style={{ fontSize: 14, fontWeight: 600, color: '#888' }}>Allergy Scan</span>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: '#888' }}>{t('splash.brand')}</span>
                 </h1>
                 <div
                   style={{
@@ -252,7 +239,7 @@ export default function SplashPage({ onDone }: Props) {
                     letterSpacing: '0.04em',
                   }}
                 >
-                  🤖 AI가 음식 성분을 분석해드려요
+                  {t('splash.ai_badge')}
                 </div>
               </motion.div>
             </div>
@@ -280,20 +267,24 @@ export default function SplashPage({ onDone }: Props) {
                 </motion.span>
                 <div>
                   <p style={{ fontSize: 15, fontWeight: 900, color: '#1A1A1A', lineHeight: 1.2 }}>
-                    어떤 언어로 볼까요?
+                    {t('splash.choose_language')}
                   </p>
                   <p style={{ fontSize: 11, color: '#AAA', fontWeight: 500 }}>
-                    10개 언어 지원해요!
+                    {t('splash.lang_count')}
                   </p>
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 7 }}>
+              <div
+                style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 7 }}
+                onMouseLeave={() => setPreviewLang(selected)}
+              >
                 {LANGUAGES.map((lang, i) => {
                   const isSelected = selected === lang.code
                   return (
                     <motion.button
                       key={lang.code}
+                      onMouseEnter={() => setPreviewLang(lang.code as LangCode)}
                       onClick={() => handleSelect(lang.code as LangCode)}
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -362,8 +353,10 @@ export default function SplashPage({ onDone }: Props) {
                 }}
               >
                 {selected
-                  ? `${selectedLang?.flag}  ${selectedLang?.label}로 시작하기! 🚀`
-                  : '👆 언어를 먼저 골라주세요!'}
+                  ? t('splash.start_cta')
+                      .replace('{flag}', selectedLang?.flag ?? '')
+                      .replace('{label}', selectedLang?.label ?? '')
+                  : t('splash.pick_first')}
               </motion.button>
 
               <p
@@ -375,7 +368,7 @@ export default function SplashPage({ onDone }: Props) {
                   fontWeight: 600,
                 }}
               >
-                나중에 언제든지 바꿀 수 있어요 😉
+                {t('splash.change_later')}
               </p>
             </motion.div>
           </div>

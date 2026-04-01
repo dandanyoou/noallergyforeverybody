@@ -4,6 +4,9 @@ import { t as translate, type LangCode } from './i18n'
 interface LangContextType {
   lang: LangCode
   setLang: (lang: LangCode) => void
+  /** Splash hover preview: when set, `t()` uses this language until cleared */
+  previewLang: LangCode | null
+  setPreviewLang: (lang: LangCode | null) => void
   t: (key: string) => string
 }
 
@@ -21,16 +24,19 @@ function getSavedLang(): LangCode | null {
 
 export function LangProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<LangCode>(() => getSavedLang() ?? 'en')
+  const [previewLang, setPreviewLang] = useState<LangCode | null>(null)
 
   const setLang = useCallback((code: LangCode) => {
     setLangState(code)
+    setPreviewLang(null)
     try { localStorage.setItem(STORAGE_KEY, code) } catch {}
   }, [])
 
-  const t = useCallback((key: string) => translate(key, lang), [lang])
+  const effectiveLang = previewLang ?? lang
+  const t = useCallback((key: string) => translate(key, effectiveLang), [effectiveLang])
 
   return (
-    <LangContext.Provider value={{ lang, setLang, t }}>
+    <LangContext.Provider value={{ lang, setLang, previewLang, setPreviewLang, t }}>
       {children}
     </LangContext.Provider>
   )

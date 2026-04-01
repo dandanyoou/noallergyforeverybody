@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect, useRef as useRefAlias } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { predictImage } from '@/lib/api'
 import { useLang } from '@/lib/LangContext'
 import { motion } from 'framer-motion'
+import RotatingHeroEmoji from '@/components/RotatingHeroEmoji'
 
 const ALLERGY_KEYS = [
   '계란', '우유', '밀', '대두', '땅콩', '견과류',
@@ -10,8 +11,8 @@ const ALLERGY_KEYS = [
 ]
 
 const FOOD_EMOJIS = [
-  '🍕','🍔','🌮','🍜','🍣','🥗','🍱','🥘','🍛','🍤',
-  '🍙','🥞','🍩','🧁','🍦','🍎','🥑','🫐','🧆','🥟',
+  '🍕', '🍔', '🌮', '🍜', '🍣', '🍱', '🥘', '🍛', '🍤',
+  '🍙', '🥞', '🍩', '🧁', '🍦', '🍎', '🥑', '🫐', '🧆', '🥟',
 ]
 
 interface FlyingEmoji {
@@ -138,21 +139,7 @@ export default function HomePage() {
           zIndex: 1,
         }}
       >
-        {/* 떠다니는 배경 이모지 */}
-        <motion.div
-          style={{ position: 'absolute', top: 14, right: 20, fontSize: 28, zIndex: 1 }}
-          animate={{ y: [0, -8, 0], rotate: [0, 5, 0] }}
-          transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          🍔
-        </motion.div>
-        <motion.div
-          style={{ position: 'absolute', top: 50, left: 16, fontSize: 22, zIndex: 1 }}
-          animate={{ y: [0, -6, 0], rotate: [0, -6, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-        >
-          🥗
-        </motion.div>
+        <RotatingHeroEmoji top={14} right={20} fontSize={28} />
         <motion.div
           style={{ position: 'absolute', top: 18, left: '50%', marginLeft: -12, fontSize: 18, zIndex: 1 }}
           animate={{ y: [0, -6, 0] }}
@@ -215,10 +202,10 @@ export default function HomePage() {
             transition={{ delay: 0.2 }}
           >
             <h1 style={{ fontSize: 20, fontWeight: 900, color: '#1A1A1A', lineHeight: 1.2, margin: 0 }}>
-              알레르기 걱정 NO! 🙅
+              {t('splash.headline')}
             </h1>
             <p style={{ fontSize: 12, color: '#888', fontWeight: 600, margin: '2px 0 0' }}>
-              AI가 음식 성분을 분석해드려요 🤖
+              {t('splash.ai_badge')}
             </p>
           </motion.div>
         </div>

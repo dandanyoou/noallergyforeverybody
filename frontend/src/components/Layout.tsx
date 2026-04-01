@@ -1,38 +1,14 @@
 import { Outlet, NavLink, useLocation } from 'react-router-dom'
 import { useLang } from '@/lib/LangContext'
 import { LANGUAGES } from '@/lib/i18n'
-import { useState, type MouseEvent } from 'react'
+import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 export default function Layout() {
   const { t, lang, setLang } = useLang()
   const [showLangModal, setShowLangModal] = useState(false)
-  const [burstEmojis, setBurstEmojis] = useState<Array<{ id: number; emoji: string; x: number; y: number; dx: number; duration: number }>>([])
   const currentFlag = LANGUAGES.find((l) => l.code === lang)?.flag ?? ''
   const location = useLocation()
-  const EMOJIS = ['🍕', '🍔', '🌮', '🍜', '🍣', '🥗', '🍛', '🍤', '🍩', '🧁']
-
-  function burstAt(x: number, y: number, count = 9) {
-    for (let i = 0; i < count; i += 1) {
-      const id = Date.now() + i + Math.floor(Math.random() * 10000)
-      const emoji = EMOJIS[Math.floor(Math.random() * EMOJIS.length)]
-      const dx = (Math.random() - 0.5) * 160
-      const duration = 0.9 + Math.random() * 0.6
-      const item = { id, emoji, x, y, dx, duration }
-      setBurstEmojis((prev) => [...prev, item])
-      setTimeout(() => {
-        setBurstEmojis((prev) => prev.filter((e) => e.id !== id))
-      }, duration * 1000 + 250)
-    }
-  }
-
-  function handleGlobalClickCapture(e: MouseEvent<HTMLDivElement>) {
-    const target = e.target as HTMLElement
-    const button = target.closest('button')
-    if (!button || button.hasAttribute('disabled')) return
-    const rect = button.getBoundingClientRect()
-    burstAt(rect.left + rect.width / 2, rect.top + rect.height / 2, 8)
-  }
 
   const nav = [
     { to: '/', icon: 'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z', label: t('nav.scan') },
@@ -42,20 +18,7 @@ export default function Layout() {
   ]
 
   return (
-    <div className="flex flex-col min-h-screen max-w-lg mx-auto bg-[#FFFBEE]" onClickCapture={handleGlobalClickCapture}>
-      <div className="fixed inset-0 pointer-events-none z-[9999]">
-        {burstEmojis.map((e) => (
-          <motion.span
-            key={e.id}
-            style={{ position: 'fixed', left: e.x, top: e.y, fontSize: 18 }}
-            initial={{ x: 0, y: 0, opacity: 1, rotate: 0, scale: 0.9 }}
-            animate={{ x: e.dx, y: -90 - Math.random() * 50, opacity: 0, rotate: (Math.random() - 0.5) * 180, scale: 1.2 }}
-            transition={{ duration: e.duration, ease: 'easeOut' }}
-          >
-            {e.emoji}
-          </motion.span>
-        ))}
-      </div>
+    <div className="flex flex-col min-h-screen max-w-lg mx-auto bg-[#FFFBEE]">
       {/* Header — glass morphism */}
       <header className="sticky top-0 z-40 glass border-b border-white/20 px-4 py-3 flex items-center gap-3">
         <div className="w-10 h-10 bg-gradient-to-br from-[#FFDE32] to-[#FFB800] rounded-xl flex items-center justify-center shadow-glow">
